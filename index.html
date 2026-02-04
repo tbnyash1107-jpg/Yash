@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -6,36 +6,28 @@
   <title>Flash Warning</title>
   <style>
     body, html {
-      margin: 0;
-      padding: 0;
-      width: 100%;
-      height: 100%;
+      margin: 0; padding: 0;
+      width: 100%; height: 100%;
       background-color: black;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      display: flex; justify-content: center; align-items: center;
       overflow: hidden;
       font-family: 'Arial Black', sans-serif;
     }
 
-    /* The "Tap to Enter" Screen */
+    /* Entry Screen */
     #overlay {
       position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
+      inset: 0;
       background: black;
       color: white;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      display: flex; justify-content: center; align-items: center;
       z-index: 9999;
       cursor: pointer;
-      font-size: 2rem;
-      text-transform: uppercase;
-      letter-spacing: 5px;
+      font-size: 1.5rem;
+      text-align: center;
     }
 
-    /* The Rapid Blinking Animation */
+    /* The Flash Animation */
     @keyframes strobe {
       0% { background-color: black; }
       50% { background-color: white; }
@@ -43,34 +35,48 @@
     }
 
     .active-strobe {
-      animation: strobe 0.05s steps(2, start) infinite;
+      animation: strobe 0.05s infinite;
     }
 
-    /* Content Styling */
     #content {
       display: none;
       text-align: center;
-      z-index: 10;
     }
 
-    .zoom-text {
-      font-size: 5rem;
-      color: red;
-      animation: zoom 0.3s ease-in-out infinite alternate;
+    /* Gorilla Image Styling */
+    .gorilla-img {
+      max-width: 80%;
+      max-height: 60vh;
+      border: 10px solid red;
+      /* Shake and Zoom */
+      animation: shake 0.1s infinite, zoom 0.2s infinite alternate;
+    }
+
+    @keyframes shake {
+      0% { transform: translate(5px, 5px); }
+      50% { transform: translate(-5px, -5px); }
+      100% { transform: translate(5px, 5px); }
     }
 
     @keyframes zoom {
       from { transform: scale(1); }
-      to { transform: scale(1.5); }
+      to { transform: scale(1.1); }
+    }
+
+    .warning-text {
+      color: red;
+      font-size: 3rem;
+      text-shadow: 4px 4px black;
     }
   </style>
 </head>
 <body>
 
-  <div id="overlay">TAP TO START</div>
+  <div id="overlay">⚠️ TAP TO ENTER ⚠️</div>
 
   <div id="content">
-    <h1 class="zoom-text">WATCH OUT!</h1>
+    <img src="gorilla.jpg" class="gorilla-img">
+    <h1 class="warning-text">GET OUT!</h1>
   </div>
 
   <audio id="myAudio" loop>
@@ -83,16 +89,12 @@
     const audio = document.getElementById('myAudio');
 
     overlay.addEventListener('click', () => {
-      // 1. Play the uploaded sound
-      audio.play();
-
-      // 2. Hide overlay and show content
+      audio.play().catch(e => console.log("Audio block:", e));
       overlay.style.display = 'none';
       content.style.display = 'block';
-
-      // 3. Start the rapid blinking
       document.body.classList.add('active-strobe');
     });
   </script>
 </body>
 </html>
+      
